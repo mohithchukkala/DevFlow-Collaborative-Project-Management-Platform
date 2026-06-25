@@ -12,7 +12,10 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!token) return undefined;
 
-    const socket = io('/', {
+    // Connect to the backend origin in production (VITE_API_URL); in dev,
+    // '/' goes through Vite's /socket.io proxy to localhost:5000.
+    const socketUrl = import.meta.env.VITE_API_URL || '/';
+    const socket = io(socketUrl, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });
